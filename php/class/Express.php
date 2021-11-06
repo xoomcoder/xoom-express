@@ -7,9 +7,34 @@
 
 class Express
 {
+    static $class_dir = "";
+
     static function start()
     {
-        
+        Express::$class_dir = __DIR__;
+        spl_autoload_register("Express::autoload");
+
+        Express::install();
     }
+
+    static function autoload ($classname)
+    {
+        $classfile = Express::$class_dir . "/$classname.php";
+        if (is_file($classfile))
+            include $classfile;
+    }
+
+    static function install ()
+    {
+        add_filter("template_include", "Express::template_redirect");
+    }
+
+    static function template_redirect ($template)
+    {
+        $template = "";
+        return $template;
+
+    }
+
     //@end
 }
