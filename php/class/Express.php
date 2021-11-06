@@ -31,9 +31,27 @@ class Express
 
     static function template_redirect ($template)
     {
+        Express::buildResponse();
+
         $template = "";
         return $template;
 
+    }
+
+    static function buildResponse ()
+    {
+        $json = [];
+        $json["request"] = $_REQUEST;
+
+
+        status_header(200);
+        header("Content-Type: application/json");
+        $response = json_encode($json);
+        
+        // log
+        file_put_contents(__DIR__ . "/log.txt", "$response\n", FILE_APPEND);
+
+        echo $response;
     }
 
     //@end
