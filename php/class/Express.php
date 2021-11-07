@@ -149,9 +149,13 @@ class Express
         $lines = explode("\n", $command);
         foreach($lines as $number => $line) {
             $line = trim($line);
-            $call = "Api::$line";
+            extract(parse_url($line));
+            $path ??= "";
+            $query ??= "";
+            
+            $call = "Api::$path";            
             if (is_callable($call)) {
-                $call();
+                $call($query);
             }
         }
     }
