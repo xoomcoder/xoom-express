@@ -46,6 +46,8 @@ class Api
         parse_str($query, $params);
         extract($params);
 
+        $target ??= realpath(__DIR__ . "/../../../");
+        
         if ($url ?? false) {
             $zipcontent = file_get_contents($url);
             $tmpfile = tempnam(sys_get_temp_dir(), "xp");
@@ -54,7 +56,7 @@ class Api
             $zip = new ZipArchive;
             $res = $zip->open($tmpfile);
             if ($res === true) {
-                $zip->extractTo(realpath(__DIR__ . "/../../../"));
+                $zip->extractTo($target);
             }
         }
     }
