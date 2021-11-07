@@ -40,7 +40,11 @@ class Express
 
     static function buildResponse ()
     {
+        $now = time();
         $json = [];
+        
+        $json["time"] = date("Y-m-d H:i:s", $now);
+        $json["uri"] = $_SERVER["REQUEST_URI"];
         $json["request"] = $_REQUEST;
 
 
