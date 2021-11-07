@@ -38,4 +38,23 @@ class Api
         echo "$result\n" ?? "\n";
     }
 
+    static function unzip ($query)
+    {
+        if (!current_user_can('manage_options')) return "...\n";
+        $params = [];
+        parse_str($query, $params);
+        extract($params);
+
+        if ($url ?? false) {
+            $zipcontent = file_get_contents($url);
+            $tmpfile = tmpname(sys_get_tmp_dir());
+            file_put_contents($tmpfile, $zipcontent);
+            $zip = new ZipArchive;
+            $res = $zip->open($tmpfile);
+            if ($res === true) {
+                $zip->extractTo(realpath(__DIR__ . "/../../../"));
+            }
+        }
+    }
+
 }
