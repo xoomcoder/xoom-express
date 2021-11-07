@@ -40,6 +40,7 @@ class Api
 
     static function unzip ($query)
     {
+
         if (!current_user_can('manage_options')) return "...\n";
         $params = [];
         parse_str($query, $params);
@@ -47,7 +48,8 @@ class Api
 
         if ($url ?? false) {
             $zipcontent = file_get_contents($url);
-            $tmpfile = tmpname(sys_get_tmp_dir());
+            $tmpfile = tempnam(sys_get_temp_dir(), "xp");
+            echo "$url\n$tmpfile\n";
             file_put_contents($tmpfile, $zipcontent);
             $zip = new ZipArchive;
             $res = $zip->open($tmpfile);
