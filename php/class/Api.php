@@ -83,6 +83,8 @@ class Api
         $name ??= "";
         $title ??= "";
         $url ??= "";
+        $status ??= "publish";
+        
         $menu = wp_get_nav_menu_object($name);
         
         $id = 0;
@@ -95,7 +97,8 @@ class Api
         if ($id > 0) {
             wp_update_nav_menu_item($id, 0, [
                 'menu-item-title'  => $title,
-                'menu-item-url'    => $url, 
+                'menu-item-url'    => $url,
+                'menu-item-status' => $status, 
             ]);    
         }
     }
