@@ -93,13 +93,18 @@ class Api
         else {
             $id = $menu->term_id ?? 0;
         }
-        echo "$id,$name,$title,$url,$status\n";
         if ($id > 0) {
-            wp_update_nav_menu_item($id, 0, [
-                'menu-item-title'  => $title,
-                'menu-item-url'    => $url,
-                'menu-item-status' => $status, 
-            ]);    
+            $url = esc_url_raw($url);
+            $items = get_posts(["meta_key" => "_menu_item_url", "meta_value" => $url]);
+            if (empty($items)) {
+                $itemid = wp_update_nav_menu_item($id, 0, [
+                    'menu-item-title'  => $title,
+                    'menu-item-url'    => $url,
+                    'menu-item-status' => $status, 
+                ]);
+                echo "$itemid,$name,$title,$url,$status,$id\n";
+    
+            }
         }
     }
 
