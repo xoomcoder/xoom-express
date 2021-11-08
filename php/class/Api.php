@@ -92,7 +92,7 @@ class Api
         }
         else {
             var_dump($menu);
-            $id = $menu["term_id"] ?? 0;
+            $id = $menu->term_id ?? 0;
         }
         echo "$id,$name,$title,$url,$status";
         if ($id > 0) {
