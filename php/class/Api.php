@@ -61,4 +61,12 @@ class Api
     
         }
     }
+
+    static function add_page ($params)
+    {
+        $params["post_status"] ??= "publish";
+        $params["post_type"] ??= "page";
+        Api::insert_post($params);
+    }
+
 }
