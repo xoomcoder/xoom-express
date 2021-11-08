@@ -48,7 +48,7 @@ class Api
 
         $target ??= realpath(__DIR__ . "/../../../");
 
-        if ($url ?? false) {
+        if (is_dir($target) && ($url ?? false)) {
             $zipcontent = file_get_contents($url);
             $tmpfile = tempnam(sys_get_temp_dir(), "xp");
             echo "$url\n$tmpfile\n$target\n";
