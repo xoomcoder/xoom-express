@@ -41,7 +41,7 @@ class Express
 
     static function add_menu ()
     {
-        add_menu_page(
+        add_plugins_page(
             'Express',
             'Express',
             'manage_options',
@@ -146,17 +146,25 @@ class Express
     static function process_form ()
     {
         $command = $_REQUEST["command"] ?? "";
-        $lines = explode("\n", $command);
-        foreach($lines as $number => $line) {
-            $line = trim($line);
-            extract(parse_url($line));
-            $path ??= "";
-            $query ??= "";
+        if ($command != "") {
+            if (!current_user_can('manage_options')) return "...\n";
+
+            $lines = explode("\n", $command);
+            foreach($lines as $number => $line) {
+                $line = trim($line);
+                extract(parse_url($line));
+                $path ??= "";
+                $query ??= "";
+                
+                $call = "Api::$path";            
+                if (is_callable($call)) {
+    
+                    $params = [];
+                    parse_str($query, $params);
             
-            $call = "Api::$path";            
-            if (is_callable($call)) {
-                $call($query);
-            }
+                    $call($params);
+                }
+            }    
         }
     }
 

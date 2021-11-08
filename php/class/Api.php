@@ -8,12 +8,8 @@ class Api
         echo "\n";
     }
 
-    static function get_option ($query)
+    static function get_option ($params)
     {
-        if (!current_user_can('manage_options')) return "...\n";
-
-        $params = [];
-        parse_str($query, $params);
         extract($params);
 
         if ($name ?? false) {
@@ -23,12 +19,8 @@ class Api
         echo "$result\n" ?? "\n";
     }
 
-    static function set_option ($query)
+    static function set_option ($params)
     {
-        if (!current_user_can('manage_options')) return "...\n";
-
-        $params = [];
-        parse_str($query, $params);
         extract($params);
 
         if ($name ?? false) {
@@ -38,12 +30,8 @@ class Api
         echo "$result\n" ?? "\n";
     }
 
-    static function unzip ($query)
+    static function unzip ($params)
     {
-
-        if (!current_user_can('manage_options')) return "...\n";
-        $params = [];
-        parse_str($query, $params);
         extract($params);
 
         $target ??= realpath(__DIR__ . "/../../../");
@@ -61,4 +49,16 @@ class Api
         }
     }
 
+    static function insert_post ($params) 
+    {
+        extract($params);
+        $post_title = trim($post_title ?? "");
+
+        if ($post_title) {
+            $pid = wp_insert_post($params);
+
+            echo "$pid";
+    
+        }
+    }
 }
