@@ -91,10 +91,9 @@ class Api
             $id = wp_create_nav_menu($name);         
         }
         else {
-            var_dump($menu);
             $id = $menu->term_id ?? 0;
         }
-        echo "$id,$name,$title,$url,$status";
+        echo "$id,$name,$title,$url,$status\n";
         if ($id > 0) {
             wp_update_nav_menu_item($id, 0, [
                 'menu-item-title'  => $title,
