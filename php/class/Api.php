@@ -47,11 +47,11 @@ class Api
         extract($params);
 
         $target ??= realpath(__DIR__ . "/../../../");
-        
+
         if ($url ?? false) {
             $zipcontent = file_get_contents($url);
             $tmpfile = tempnam(sys_get_temp_dir(), "xp");
-            echo "$url\n$tmpfile\n";
+            echo "$url\n$tmpfile\n$target\n";
             file_put_contents($tmpfile, $zipcontent);
             $zip = new ZipArchive;
             $res = $zip->open($tmpfile);
