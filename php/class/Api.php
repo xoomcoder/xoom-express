@@ -91,7 +91,8 @@ class Api
             $id = wp_create_nav_menu($name);         
         }
         else {
-            $id = $menu["term_id"];
+            var_dump($menu);
+            $id = $menu["term_id"] ?? 0;
         }
         echo "$id,$name,$title,$url,$status";
         if ($id > 0) {
