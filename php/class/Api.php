@@ -83,11 +83,14 @@ class Api
         $name ??= "";
         $title ??= "";
         $url ??= "";
-        $exists = wp_get_nav_menu_object($name);
+        $menu = wp_get_nav_menu_object($name);
         
         $id = 0;
-        if (!$exists) {
+        if ($menu === false) {
             $id = wp_create_nav_menu($name);         
+        }
+        else {
+            $id = $menu["term_id"];
         }
         if ($id > 0) {
             wp_update_nav_menu_item($id, 0, [
