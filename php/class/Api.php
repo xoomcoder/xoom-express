@@ -95,7 +95,11 @@ class Api
         }
         if ($id > 0) {
             $url = esc_url_raw($url);
-            $items = get_posts(["meta_key" => "_menu_item_url", "meta_value" => $url]);
+            $items = get_posts([
+                "post_type" => "nav_menu_item",
+                "meta_key" => "_menu_item_url", 
+                "meta_value" => $url
+            ]);
             if (empty($items)) {
                 $itemid = wp_update_nav_menu_item($id, 0, [
                     'menu-item-title'  => $title,
