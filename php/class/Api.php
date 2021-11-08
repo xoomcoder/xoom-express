@@ -76,4 +76,25 @@ class Api
         Api::insert_post($params);
     }
 
+    static function add_menu ($params)
+    {
+        extract($params);
+
+        $name ??= "";
+        $title ??= "";
+        $url ??= "";
+        $exists = wp_get_nav_menu_object($name);
+        
+        $id = 0;
+        if (!$exists) {
+            $id = wp_create_nav_menu($name);         
+        }
+        if ($id > 0) {
+            wp_update_nav_menu_item($id, 0, [
+                'menu-item-title'  => $title,
+                'menu-item-url'    => $url, 
+            ]);    
+        }
+    }
+
 }
