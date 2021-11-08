@@ -49,6 +49,13 @@ class Api
         }
     }
 
+    static function git ($params) 
+    {
+        $branch = $params["branch"] ?? "main";
+        $params["url"] = $params["url"] . "/archive/refs/heads/$branch.zip" ?? "";
+        Api::unzip($params);
+    }
+
     static function insert_post ($params) 
     {
         extract($params);
