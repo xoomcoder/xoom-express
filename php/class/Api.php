@@ -79,6 +79,15 @@ class Api
         }
     }
 
+    static function set_front_page ($params)
+    {
+        $found = get_page_by_title(trim($params["post_title"] ?? ""));
+        if ($found) {
+            update_option("show_on_front", 'page');
+            update_option("page_on_front", $found->ID);
+        }
+    }
+
     static function add_menu ($params)
     {
         extract($params);
