@@ -64,16 +64,22 @@ class Api
         if ($post_title) {
             $pid = wp_insert_post($params);
 
-            echo "$pid";
+            echo "$pid,$post_title\n";
     
         }
     }
 
     static function add_page ($params)
     {
-        $params["post_status"] ??= "publish";
-        $params["post_type"] ??= "page";
-        Api::insert_post($params);
+        $found = get_posts([
+            "post_type" => "page",
+            "post_title" => trim($params["post_title"] ?? ""), 
+        ]);
+        if (empty($found)) {
+            $params["post_status"] ??= "publish";
+            $params["post_type"] ??= "page";
+            Api::insert_post($params);    
+        }
     }
 
     static function add_menu ($params)
@@ -95,6 +101,7 @@ class Api
         }
         if ($id > 0) {
             $url = esc_url_raw($url);
+            // FIXME: add also menu check on menu item
             $items = get_posts([
                 "post_type" => "nav_menu_item",
                 "meta_key" => "_menu_item_url", 
