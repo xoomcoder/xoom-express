@@ -43,4 +43,8 @@ unzip?url=https://github.com/xoomcoder/xoom-express/archive/refs/heads/master.zi
 
 insert_post?post_title=home&post_status=publish&post_type=page
 
+
+script?url=https://raw.githubusercontent.com/xoomcoder/xoom-express/master/assets/scripts/example1.md
+
 ```
+

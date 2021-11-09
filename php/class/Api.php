@@ -125,4 +125,16 @@ class Api
         }
     }
 
+    static function script ($params)
+    {
+        extract($params);
+        $url ??= "";
+        if ($url) {
+            $code = file_get_contents($url);
+            if ($code) {
+                Express::run_command($code);
+            }
+        }
+    }
+
 }

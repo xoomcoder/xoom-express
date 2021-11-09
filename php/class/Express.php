@@ -146,7 +146,16 @@ class Express
     static function process_form ()
     {
         $command = $_REQUEST["command"] ?? "";
-        if ($command != "") {
+        Express::run_command($command);
+    }
+
+    static function run_command ($command)
+    {
+        // FIXME: improve blocking too many recursive calls
+        static $nb_recursive = 0;
+        $nb_recursive++;
+
+        if (($nb_recursive < 100) && ($command != "")) {
             if (!current_user_can('manage_options')) return "...\n";
 
             $lines = explode("\n", $command);
@@ -166,7 +175,9 @@ class Express
                 }
             }    
         }
-    }
 
+        $nb_recursive--;
+
+    }
     //@end
 }
