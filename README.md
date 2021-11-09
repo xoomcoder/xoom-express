@@ -1,5 +1,7 @@
 # xoom-express
 
+Express is a jetpack of dev tools for WP websites.
+
 ## examples
 
 
@@ -24,17 +26,21 @@ set_front_page?post_title=home
 
 ```
 
-* also
+* also unzip plugins from github or other remote site
 
 ```
-unzip?url=https://github.com/xoomcoder/xoom-express/archive/refs/heads/master.zip
-
-insert_post?post_title=home&post_status=publish&post_type=page
-
-
 git?url=https://github.com/xoomcoder/xl
 
 git?branch=master&url=https://github.com/xoomcoder/xoom-express
 
+unzip?url=https://github.com/xoomcoder/xoom-express/archive/refs/heads/master.zip
+
+```
+
+* and more
+
+```
+
+insert_post?post_title=home&post_status=publish&post_type=page
 
 ```
