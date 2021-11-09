@@ -71,10 +71,7 @@ class Api
 
     static function add_page ($params)
     {
-        $found = get_posts([
-            "post_type" => "page",
-            "post_title" => trim($params["post_title"] ?? ""), 
-        ]);
+        $found = get_page_by_title(trim($params["post_title"] ?? ""));
         if (empty($found)) {
             $params["post_status"] ??= "publish";
             $params["post_type"] ??= "page";
