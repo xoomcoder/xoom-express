@@ -155,7 +155,7 @@ class Api
         if ($mode == "off") {
             echo "delete $maintenance_file\n";
 
-            if (is_file($maintenance_file")) {
+            if (is_file($maintenance_file)) {
                 unlink($maintenance_file);
             }
         }
