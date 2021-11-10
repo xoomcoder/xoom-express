@@ -108,14 +108,13 @@ class Express
 
     static function template_redirect ($template)
     {
-        Express::build_response();
+        $template = Express::build_response($template);
 
-        $template = "";
         return $template;
 
     }
 
-    static function build_response ()
+    static function build_response ($template)
     {
         $now = time();
         $uri = $_SERVER["REQUEST_URI"];
@@ -134,13 +133,22 @@ class Express
         status_header(200);
         header("Content-Type: application/json");
         $response = json_encode($json);
-        
+        echo $response;
+
+        $mydir = dirname(__DIR__) . "/my";
         // log
-        $log_file = __DIR__ . "/log.txt";
+        $log_file = "$mydir/log.txt";
         if (is_file($log_file))
             file_put_contents($log_file, "$response\n", FILE_APPEND);
 
-        echo $response;
+        if (is_file("$mydir/maintenance.json")) {
+            $tab_maintenance = json_decode(file_get_contents("$mydir/maintenance.json"), true);
+            if (is_array($tab_maintenance)) {
+                $template = $tab_maintenance["template"] ?? "";
+            }
+        }
+
+        return $template;
     }
 
     static function process_form ()

@@ -5,5 +5,5 @@
 
 if (!function_exists("add_action")) die();  // stop direct access
 
-require __DIR__. "/php/class/Express.php";
+require __DIR__. "/class/Express.php";
 Express::start();

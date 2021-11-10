@@ -2,7 +2,14 @@
 
 Express is a jetpack of dev tools for WP websites.
 
-## examples
+## Installation
+
+1. Download this repo as .zip archive
+2. Add the .zip archive in Plugins admin page
+3. Activate the plugin Express
+4. Go the new Express admin page (submenu of Plugins menu) 
+
+## Examples
 
 
 * basic WP setup 
