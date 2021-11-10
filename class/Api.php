@@ -139,6 +139,9 @@ class Api
 
     static function add_maintenance ($params)
     {
+        extract($params);
+        $mode ??= "";
+
         $expressdir = dirname(__DIR__);
         $mydir = "$expressdir/my";
         if (!is_dir($mydir)) {
@@ -148,12 +151,24 @@ class Api
             touch("$mydir/index.php");
         }
 
-        $maintenance = [
-            "template" => "",
-        ];
-        file_put_contents(
-            "$mydir/maintenance.json", 
-            json_encode($maintenance, JSON_PRETTY_PRINT));
+        $maintenance_file = "$mydir/maintenance.json";
+        if ($mode == "off") {
+            echo "delete $maintenance_file\n";
+
+            if (is_file($maintenance_file")) {
+                unlink($maintenance_file);
+            }
+        }
+        else {
+            echo "create $maintenance_file\n";
+
+            $maintenance = [
+                "template" => "",
+            ];
+            file_put_contents(
+                $maintenance_file, 
+                json_encode($maintenance, JSON_PRETTY_PRINT));    
+        }
         
     }
 }
