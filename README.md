@@ -56,5 +56,7 @@ script?url=https://raw.githubusercontent.com/xoomcoder/xoom-express/master/asset
 
 add_maintenance
 
+add_maintenance?mode=off
+
 ```
 
