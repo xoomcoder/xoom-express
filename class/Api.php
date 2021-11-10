@@ -34,7 +34,7 @@ class Api
     {
         extract($params);
 
-        $target ??= realpath(__DIR__ . "/../../../");
+        $target ??= dirname(__DIR__);
 
         if (is_dir($target) && ($url ?? false)) {
             $zipcontent = file_get_contents($url);
@@ -143,7 +143,7 @@ class Api
         $mydir = "$expressdir/my";
         if (!is_dir($mydir) {
             echo " create $mydir\n";
-            
+
             mkdir($mydir);
             touch("$mydir/index.php");
         }
