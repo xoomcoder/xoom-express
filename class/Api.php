@@ -34,7 +34,7 @@ class Api
     {
         extract($params);
 
-        $target ??= dirname(__DIR__);
+        $target ??= dirname(dirname(__DIR__));
 
         if (is_dir($target) && ($url ?? false)) {
             $zipcontent = file_get_contents($url);
@@ -141,8 +141,8 @@ class Api
     {
         $expressdir = dirname(__DIR__);
         $mydir = "$expressdir/my";
-        if (!is_dir($mydir) {
-            echo " create $mydir\n";
+        if (!is_dir($mydir)) {
+            echo "create $mydir\n";
 
             mkdir($mydir);
             touch("$mydir/index.php");
@@ -150,7 +150,7 @@ class Api
 
         $maintenance = [
             "template" => "",
-        ]
+        ];
         file_put_contents(
             "$mydir/maintenance.json", 
             json_encode($maintenance, JSON_PRETTY_PRINT));
