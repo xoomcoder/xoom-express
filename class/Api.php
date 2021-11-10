@@ -137,4 +137,21 @@ class Api
         }
     }
 
+    static function add_maintenance ()
+    {
+        $expressdir = dirname(__DIR__);
+        $mydir = "$expressdir/my";
+        if (!is_dir($mydir) {
+            mkdir($mydir);
+            touch("$mydir/index.php");
+        }
+
+        $maintenance = [
+            "template" => "",
+        ]
+        file_put_contents(
+            "$mydir/maintenance.json", 
+            json_encode($maintenance, JSON_PRETTY_PRINT));
+        
+    }
 }
