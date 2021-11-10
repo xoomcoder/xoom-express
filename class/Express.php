@@ -186,6 +186,9 @@ class Express
             
                     $call($params);
                 }
+                // reset
+                $query = "";
+                $path = "";
             }    
         }
 
