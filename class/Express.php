@@ -124,16 +124,21 @@ class Express
         $json["uri"] = $uri;
         $json["request"] = $_REQUEST;
 
+        $out = "";
         if ($uri == "/@/api") {
             ob_start();
             Express::process_form();
             $json["form_result"] = ob_get_clean();
+            $out = "json";
         }
 
-        status_header(200);
-        header("Content-Type: application/json");
-        $response = json_encode($json);
-        echo $response;
+        if ($out == "json") {
+            status_header(200);
+            header("Content-Type: application/json");
+            $response = json_encode($json);
+            echo $response;
+            $template = "";    
+        }
 
         $mydir = dirname(__DIR__) . "/my";
         // log
