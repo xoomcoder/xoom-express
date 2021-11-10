@@ -137,11 +137,13 @@ class Api
         }
     }
 
-    static function add_maintenance ()
+    static function add_maintenance ($params)
     {
         $expressdir = dirname(__DIR__);
         $mydir = "$expressdir/my";
         if (!is_dir($mydir) {
+            echo " create $mydir\n";
+            
             mkdir($mydir);
             touch("$mydir/index.php");
         }
