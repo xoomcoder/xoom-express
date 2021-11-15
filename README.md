@@ -23,14 +23,17 @@ set_option?name=blog_public&value=0
 
 
 add_page?post_title=home
+add_page?post_title=news
 add_page?post_title=products
 add_page?post_title=contact
 
-add_menu?name=principal&title=home&url=/
-add_menu?name=principal&title=products&url=/products
-add_menu?name=principal&title=contact&url=/contact
+add_menu?name=primary&title=home&url=/
+add_menu?name=primary&title=news&url=/news
+add_menu?name=primary&title=products&url=/products
+add_menu?name=primary&title=contact&url=/contact
 
 set_front_page?post_title=home
+set_post_page?post_title=news
 
 ```
 
