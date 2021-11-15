@@ -62,13 +62,28 @@ class Express
             padding: 1rem;
             font-family:monospace;
         }
+        #appx label {
+            display:inline-block;
+            padding:0.5rem 0.5rem;
+        }
         </style>
         <h1>Express</h1>
         <div id="appx">
-            <textarea v-model="command" cols="80" rows="10"></textarea>
-            <h6>{{ command.length }}</h6>
-            <button @click="sendCommand()">click: {{ counter }}</button>
-            <pre>{{ result }}</pre>
+            <section>
+                <button @click="addTerminal">Add terminal</button>
+                <label v-for="(show, index) in shows">
+                    <input type="checkbox" v-model="shows[index]">{{ titles[index] }}
+                </label>
+            </section>
+            <div v-for="(command, index) in commands">
+                <section v-if="shows[index]">
+                    <input type="text" v-model="titles[index]"> 
+                    <span>({{ commands[index].length }})</span>
+                    <textarea v-model="commands[index]" cols="80" rows="10"></textarea>
+                    <button @click="sendCommand(index)">RUN ({{ counter }})</button>
+                    <pre>{{ results[index] }}</pre>
+                </section>
+            </div>
         </div>
 
         <script type="module">
@@ -76,10 +91,16 @@ class Express
         
         const appxconfig = {
             methods: {
-                async sendCommand () {
+                addTerminal () {
+                    this.results.push('');
+                    this.commands.push('');
+                    this.titles.push('terminal' + ( 1 + this.titles.length));
+                    this.shows.push(true);
+                },
+                async sendCommand (index) {
                     this.counter++;
                     let fd = new FormData();
-                    fd.append('command', this.command);
+                    fd.append('command', this.commands[index]);
                     let response = await fetch('/@/api', {
                         method: 'POST',
                         body: fd,
@@ -87,14 +108,16 @@ class Express
                     let json = await response.json();
                     console.log(json);
                     if (json.form_result) {
-                        this.result = json.form_result;
+                        this.results[index] = json.form_result;
                     }
                 }
             },
             data() {
               return {
-                    result: '',
-                    command: '',
+                    titles: [ 'terminal1', 'terminal2', 'terminal3' ],
+                    shows: [ true, true, true ],
+                    results: [ '', '', '' ],
+                    commands: [ '', '', '' ],
                     counter: 0,
               }
             }

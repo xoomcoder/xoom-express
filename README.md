@@ -58,13 +58,17 @@ add_maintenance
 
 add_maintenance?mode=off
 
+
+create_plugin?name=myplugin
+create_theme?name=mytheme
+
 ```
 
 
 ## TODO
 
 * create plugin     (ongoing)
-* create theme
+* create theme      (ongoing)
 
 * delete page
 * delete post
