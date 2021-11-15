@@ -88,6 +88,14 @@ class Api
         }
     }
 
+    static function set_post_page ($params)
+    {
+        $found = get_page_by_title(trim($params["post_title"] ?? ""));
+        if ($found) {
+            update_option("page_for_posts", $found->ID);
+        }
+    }
+
     static function add_menu ($params)
     {
         extract($params);
