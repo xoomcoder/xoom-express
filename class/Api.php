@@ -171,4 +171,32 @@ class Api
         }
         
     }
+
+    static function add_plugin ($params)
+    {
+        extract($params);
+        $name ?= "";
+        $name = basename($name);
+        if ($name) {
+            
+            $plugindir = WP_PLUGIN_DIR . "/" . sanitize_file_name("$name");
+            if (!is_dir($plugindir)) {
+                mkdir($plugindir);
+                $now = date("Y-m-d H:i:s");
+
+                $code =
+                <<<x
+                <?php
+                /*
+                
+                Plugin Name: $name
+                Creation: $now
+
+                */
+
+                x;
+                file_put_contents("$plugindir/index.php", $code);
+            }
+        }
+    }
 }

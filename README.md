@@ -60,3 +60,20 @@ add_maintenance?mode=off
 
 ```
 
+
+## TODO
+
+* create plugin     (ongoing)
+* create theme
+
+* delete page
+* delete post
+* update page
+* update post
+
+* create user
+* delete user
+* update user
+
+
+
