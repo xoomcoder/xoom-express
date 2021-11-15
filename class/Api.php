@@ -175,11 +175,11 @@ class Api
     static function add_plugin ($params)
     {
         extract($params);
-        $name ?= "";
-        $name = basename($name);
+        $name ??= "";
+        $name = sanitize_file_name(basename($name));
         if ($name) {
             
-            $plugindir = WP_PLUGIN_DIR . "/" . sanitize_file_name("$name");
+            $plugindir = WP_PLUGIN_DIR . "/$name";
             if (!is_dir($plugindir)) {
                 mkdir($plugindir);
                 $now = date("Y-m-d H:i:s");
@@ -197,6 +197,9 @@ class Api
                 x;
                 file_put_contents("$plugindir/index.php", $code);
             }
+        }
+        else {
+            echo "missing name ($name)";
         }
     }
 }
