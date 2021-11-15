@@ -66,6 +66,21 @@ class Express
             display:inline-block;
             padding:0.5rem 0.5rem;
         }
+        .xpPopup {
+            position: fixed;
+            top:0;
+            left:0;
+            margin:0;
+            width:100%;
+            height:100%;
+            z-index:9999;
+            background-color: rgba(0,0,0,0.8);
+            padding: 2rem;
+            text-align:center;
+        }
+        .xpPopup pre {
+            background-color: #ffffff;
+        }
         </style>
         <h1>Express</h1>
         <div id="appx">
@@ -84,13 +99,37 @@ class Express
                     <pre>{{ results[index] }}</pre>
                 </section>
             </div>
+            <section>
+                <button @click="upgradePlugin">upgrade Express plugin</button>
+                <button @click="showPopup=true">popup</button>
+                <div class="xpPopup" v-show="showPopup">
+                    <h3>Info</h3>
+                    <button @click="showPopup=false">X</button>
+                    <pre>{{ popupContent }}</pre>
+                </div>
+            </section>
         </div>
 
         <script type="module">
-        import * as Vue from 'https://cdn.jsdelivr.net/npm/vue@3.2.21/dist/vue.esm-browser.prod.js';
+        import * as Vue from 'https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.prod.js';
         
         const appxconfig = {
             methods: {
+                async upgradePlugin() {
+                    this.counter++;
+                    let fd = new FormData();
+                    fd.append('command', 'git?branch=master&url=https://github.com/xoomcoder/xoom-express');
+                    let response = await fetch('/@/api', {
+                        method: 'POST',
+                        body: fd,
+                    });
+                    let json = await response.json();
+                    console.log(json);
+                    if (json.form_result) {
+                        this.popupContent = json.form_result;
+                        this.showPopup = true;
+                    }
+                },
                 addTerminal () {
                     this.results.push('');
                     this.commands.push('');
@@ -114,6 +153,8 @@ class Express
             },
             data() {
               return {
+                    popupContent: '...',
+                    showPopup: false,
                     titles: [ 'terminal1', 'terminal2', 'terminal3' ],
                     shows: [ true, true, true ],
                     results: [ '', '', '' ],
