@@ -202,4 +202,39 @@ class Api
             echo "missing name ($name)";
         }
     }
+
+    static function add_theme ($params)
+    {
+        extract($params);
+        $name ??= "";
+        $name = sanitize_file_name(basename($name));
+        if ($name) {
+            
+            $themedir = get_theme_root() . "/$name";
+            if (!is_dir($themedir)) {
+                mkdir($themedir);
+                $now = date("Y-m-d H:i:s");
+
+                $code =
+                <<<x
+                /*
+                
+                Theme Name: $name
+                Creation: $now
+
+                */
+
+                x;
+                file_put_contents("$themedir/style.css", $code);
+
+                file_put_contents("$themedir/index.php", "<?php ");
+                file_put_contents("$themedir/functions.php", "<?php ");
+
+            }
+        }
+        else {
+            echo "missing name ($name)";
+        }
+    }
+
 }
