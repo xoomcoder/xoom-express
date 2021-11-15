@@ -65,6 +65,7 @@ class Express
         #appx label {
             display:inline-block;
             padding:0.5rem 0.5rem;
+            margin: 0 auto;
         }
         .xpPopup {
             position: fixed;
@@ -80,6 +81,8 @@ class Express
         }
         .xpPopup pre {
             background-color: #ffffff;
+            margin: 0 auto;
+            max-width: calc(100% - 10rem);
         }
         </style>
         <h1>Express</h1>
