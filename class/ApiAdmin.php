@@ -1,6 +1,6 @@
 <?php
 
-class Api 
+class ApiAdmin 
 {
     static function now ()
     {

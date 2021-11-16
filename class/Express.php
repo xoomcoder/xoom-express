@@ -226,17 +226,38 @@ class Express
     static function process_form ()
     {
         $command = $_REQUEST["command"] ?? "";
-        Express::run_command($command);
+        if ($command) {
+            Express::run_command($command);
+        }
+
+        // base64 encoding makes easier GET forms
+        $b64json = $_REQUEST["b64json"] ?? "";
+        if ($b64json) {
+            $json = base64_decode($b64json);
+            if ($json !== false) {
+                $form = json_decode($json, true);
+                if (is_array($json)) {
+                    $action = $json["action"] ?? "";
+                    $call = "ApiPublic::$action";
+                    if (is_callable($call)) {
+                        // load apiKey
+                        V::set("apiKey", get_option("xp_apiKey"));
+
+                        $call($json);
+                    }
+                }
+            }
+        }
     }
 
-    static function run_command ($command)
+    static function run_command ($command, $capability="manage_options")
     {
         // FIXME: improve blocking too many recursive calls
         static $nb_recursive = 0;
         $nb_recursive++;
 
         if (($nb_recursive < 100) && ($command != "")) {
-            if (!current_user_can('manage_options')) return "...\n";
+            if ($capability && !current_user_can($capability)) return "...\n";
 
             $lines = explode("\n", $command);
             foreach($lines as $number => $line) {
@@ -245,7 +266,7 @@ class Express
                 $path ??= "";
                 $query ??= "";
                 
-                $call = "Api::$path";            
+                $call = "ApiAdmin::$path";            
                 if (is_callable($call)) {
     
                     $params = [];
