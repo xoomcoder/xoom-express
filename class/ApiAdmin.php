@@ -53,7 +53,7 @@ class ApiAdmin
     {
         $branch = $params["branch"] ?? "main";
         $params["url"] = $params["url"] . "/archive/refs/heads/$branch.zip" ?? "";
-        Api::unzip($params);
+        ApiAdmin::unzip($params);
     }
 
     static function insert_post ($params) 
@@ -75,7 +75,7 @@ class ApiAdmin
         if (empty($found)) {
             $params["post_status"] ??= "publish";
             $params["post_type"] ??= "page";
-            Api::insert_post($params);    
+            ApiAdmin::insert_post($params);    
         }
     }
 
