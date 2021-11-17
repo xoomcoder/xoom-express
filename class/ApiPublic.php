@@ -26,4 +26,25 @@ class ApiPublic
         }
     }
 
+    static function upload ($form)
+    {
+        extract($form);
+        $key ??= "";
+        $datadir = V::get("datadir");
+        if ("" != $key) {
+            $zipsearch = "$datadir/data*-$key.zip";
+            $files = glob($zipsearch);
+            if (!empty($files)) {
+                $zipfile = $files[0];
+                $zip = new ZipArchive;
+                $ok = $zip->open($zipfile);
+                if ($ok === true) {
+                    Form::uploadZip($zip, "upload");
+                    $zip->close();
+                }
+
+            }
+        }
+    }
+
 }

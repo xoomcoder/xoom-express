@@ -275,6 +275,7 @@ class Express
                     if (is_callable($call)) {
                         // load apiKey
                         V::set("apiKey", get_option("xp_apiKey"));
+                        V::set("datadir", WP_PLUGIN_DIR . "/xp-data");
 
                         $call($form);
                     }
