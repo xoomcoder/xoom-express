@@ -9,17 +9,19 @@ class ApiPublic
         $key ??= "";
         $result = "";
 
-        print_r($form);
         $apiKey = V::get("apiKey");
-        if ($key == md5($apiKey)) {
+        $md5Key = md5($apiKey);
+        if ($key == $md5Key) {
+            print_r($form);
+
             $to ??= "";
             $subject ??= "";
             $message ??= "";
-            $additional_params ??= [];
+            $headers ??= [];
     
             $message = wordwrap($message, 70, "\r\n");
     
-            $result = wp_mail($to, $subject, $message, $additional_params);
+            $result = wp_mail($to, $subject, $message, $headers);
     
         }
     }
