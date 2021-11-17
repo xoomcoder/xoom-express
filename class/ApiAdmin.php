@@ -59,7 +59,7 @@ class ApiAdmin
             touch("$zipdir/index.php");
         }
         if (is_dir($zipdir)) {
-            $name ??= "data-"md5(password_hash(uniqid(), PASSWORD_DEFAULT));
+            $name ??= "data-" . md5(password_hash(uniqid(), PASSWORD_DEFAULT));
             $zip = new ZipArchive;
             $ok = $zip->open("$zipdir/$name.zip", ZipArchive::CREATE);
             if ($ok === true) {
