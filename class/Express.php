@@ -205,6 +205,8 @@ class Express
         if ($out == "json") {
             status_header(200);
             header("Content-Type: application/json");
+            // allow access from any browser JS fetch
+            header("Access-Control-Allow-Origin: *");
             $response = json_encode($json);
             echo $response;
             $template = "";    
