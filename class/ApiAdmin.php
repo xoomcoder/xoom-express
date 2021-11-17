@@ -49,6 +49,33 @@ class ApiAdmin
         }
     }
 
+    static function add_zip ($params)
+    {
+        extract($params);
+        $target ??= dirname(dirname(__DIR__));
+        $zipdir = "$target/xp-data";
+        if (!is_dir($zipdir)) {
+            mkdir($zipdir);
+            touch("$zipdir/index.php");
+        }
+        if (is_dir($zipdir)) {
+            $name ??= "data-"md5(password_hash(uniqid(), PASSWORD_DEFAULT));
+            $zip = new ZipArchive;
+            $ok = $zip->open("$zipdir/$name.zip", ZipArchive::CREATE);
+            if ($ok === true) {
+                // empty zip is not valid
+                $now = time();
+                $index = [
+                    "creation"  => date("Y-m-d H:i:s", $now),
+                    "timestamp" => $now,
+                ];
+                $zip->addFromString('index.json', json_encode($index, JSON_PRETTY_PRINT));
+                $zip->close();
+
+            }
+        }
+    }
+
     static function git ($params) 
     {
         $branch = $params["branch"] ?? "main";
