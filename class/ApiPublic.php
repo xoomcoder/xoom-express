@@ -9,7 +9,9 @@ class ApiPublic
         $key ??= "";
         $result = "";
 
-        if ($key == md5(V::get("apiKey"))) {
+        print_r($form);
+        $apiKey = V::get("apiKey");
+        if ($key == md5($apiKey)) {
             $to ??= "";
             $subject ??= "";
             $message ??= "";

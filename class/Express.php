@@ -239,14 +239,14 @@ class Express
             $json = base64_decode($b64json);
             if ($json !== false) {
                 $form = json_decode($json, true);
-                if (is_array($json)) {
-                    $action = $json["action"] ?? "";
+                if (is_array($form)) {
+                    $action = $form["action"] ?? "";
                     $call = "ApiPublic::$action";
                     if (is_callable($call)) {
                         // load apiKey
                         V::set("apiKey", get_option("xp_apiKey"));
 
-                        $call($json);
+                        $call($form);
                     }
                 }
             }
