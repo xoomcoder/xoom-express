@@ -52,7 +52,25 @@ class Express
 
     }
     
+
+    static function listZipFiles ()
+    {
+        $result = [];
+        $target ??= dirname(dirname(__DIR__));
+        $zipdir = "$target/xp-data";
+        $result = glob("$zipdir/data-*.zip");
+        if (is_array($result)) {
+            $result = array_map("basename", $result);
+        }
+
+        return $result;
+    }
+
     static function build_admin() {
+
+        $datazip = json_encode([
+            "files" => Express::listZipFiles(),
+        ], JSON_PRETTY_PRINT);
         echo 
         <<<x
         <style>
@@ -88,6 +106,13 @@ class Express
         <h1>Express</h1>
         <div id="appx">
             <section>
+                <h3>Data Zip</h3>
+                <nav>
+                    <button v-for="f in datazip.files">{{ f }}</button>
+                </nav>
+            </section>
+            <section>
+                <h3>Terminal</h3>
                 <button @click="addTerminal">Add terminal</button>
                 <label v-for="(show, index) in shows">
                     <input type="checkbox" v-model="shows[index]">{{ titles[index] }}
@@ -116,6 +141,8 @@ class Express
         <script type="module">
         import * as Vue from 'https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.prod.js';
         
+
+        let datazip = $datazip;
         const appxconfig = {
             methods: {
                 async upgradePlugin() {
@@ -156,6 +183,7 @@ class Express
             },
             data() {
               return {
+                    datazip,
                     popupContent: '...',
                     showPopup: false,
                     titles: [ 'terminal1', 'terminal2', 'terminal3' ],
