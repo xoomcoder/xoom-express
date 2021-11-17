@@ -185,6 +185,9 @@ class Express
     {
         $now = time();
         $uri = $_SERVER["REQUEST_URI"];
+        // warning: create variables
+        extract(parse_url($uri));
+
         $json = [];
 
         $json["time"] = date("Y-m-d H:i:s", $now);
@@ -192,7 +195,7 @@ class Express
         $json["request"] = $_REQUEST;
 
         $out = "";
-        if ($uri == "/@/api") {
+        if ($path == "/@/api") {
             ob_start();
             Express::process_form();
             $json["form_result"] = ob_get_clean();
