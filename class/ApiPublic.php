@@ -19,7 +19,7 @@ class ApiPublic
     
             $message = wordwrap($message, 70, "\r\n");
     
-            $result = mail($to, $subject, $message, $additional_params);
+            $result = wp_mail($to, $subject, $message, $additional_params);
     
         }
     }
