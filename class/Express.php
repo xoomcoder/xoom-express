@@ -230,17 +230,25 @@ class Express
             $out = "json";
         }
         // direct access to zip files
-        if (str_starts_with($path, "/@/file/")) {
+        if ("/@/file/" == substr($path, 0, 8)) {
             $datadir = WP_PLUGIN_DIR . "/xp-data";
             $zpath = str_replace("/@/file/", "", $path);
             extract(pathinfo($zpath));
             $md5 = basename($dirname);
-            $searchfile = "zip://$datadir/$md5.zip#$basename";
+            $filename = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $filename));
+            $extension = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $extension));
+
+            $searchfile = "zip://$datadir/data-$md5.zip#$filename.$extension";
             $result = @file_get_contents($searchfile);
-            if ($result === null) {
-                echo $searchfile;
-            }
-            else {
+            if ($result !== null) {
+                $mimes = [
+                    "png"   => "image/png",
+                ];
+                $mime = $mimes[$extension] ?? "";
+                if ($mime != "") {
+                    header("Content-Type: $mime");
+                }
+                status_header(200);
                 echo $result;
             }
         }
