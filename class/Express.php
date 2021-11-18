@@ -271,7 +271,7 @@ class Express
             data() {
               return {
                     zipkey: '',
-                    lastSync: Date.now(),
+                    lastSync: 0, // Date.now(),
                     refreshInterval: 1000,
                     localFiles: [],
                     dirH: null,
