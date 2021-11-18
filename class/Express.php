@@ -111,14 +111,14 @@ class Express
             <section>
                 <h3>Data Zip</h3>
                 <nav>
-                    <button v-for="f in datazip.files">{{ f }}</button>
+                    <button v-for="f in datazip.files" @click="selectZip(f)">{{ f }}</button>
                 </nav>
                 <button @click="openLocalFolder">Open Local Folder</button>
                 <button @click="refreshLocalFiles">refresh list</button>
-                <input type="range" min="0" max="10000" step="1000" v-model="refreshInterval">{{ refreshInterval }}s
+                <input type="range" min="0" max="10" step="1" v-model="refreshInterval">{{ refreshInterval }}s
                 <input type="text" v-model="zipkey">({{ zipkey }})({{ lastSync }})
                 <ul class="tree">
-                    <li v-for="f in localFiles" :class="f.kind">{{ f.path + '/' + f.name }} ({{ f.modifDate }})</li>
+                    <li v-for="f in localFiles" :class="f.kind">{{ f.path + ((f.path.length > 0) ? '/' : '') + f.name }} ({{ f.modifDate }})</li>
                 </ul>
             </section>
             <section>
@@ -155,6 +155,9 @@ class Express
         let datazip = $datazip;
         const appxconfig = {
             methods: {
+                selectZip(f) {
+                    this.zipkey = f.replace("data-", "").replace(".zip", "");
+                },
                 async listSubFolder (folderH, path='', sep='') {
                     if (folderH == null) return [];
                     let entries = [];
@@ -169,7 +172,7 @@ class Express
                         else {
                             entry.lastModif = '';
                         }
-                        console.log(entry);
+                        // console.log(entry);
                         entries.push(entry);
                         if (entry.kind === 'directory') {
                             let subentries = await this.listSubFolder(entry, path + sep + entry.name, '/');
@@ -186,7 +189,7 @@ class Express
                     this.localFiles = entries;
 
                     // sync files with server
-                    console.log(this.zipkey);
+                    // console.log(this.zipkey);
                     if (this.zipkey != '') {
                         this.localFiles.forEach(async (f) => {
                             if (f.kind == 'directory') return;
@@ -208,7 +211,7 @@ class Express
                     
                                 // add upload file
                                 let blob = await f.getFile();
-                                fd.append('upload', blob, f.path + '/' + f.name);
+                                fd.append('upload', blob, f.name);
                     
                                 let response =  await fetch('https://xpress.applh.com/@/api', {
                                     method: 'POST',
@@ -226,7 +229,7 @@ class Express
                     }
 
                     if (this.refreshInterval > 0)
-                        setTimeout(this.refreshLocalFiles, this.refreshInterval);
+                        setTimeout(this.refreshLocalFiles, 1000 * this.refreshInterval);
                 },
                 async openLocalFolder () {
                     this.dirH = await window.showDirectoryPicker();
@@ -271,8 +274,8 @@ class Express
             data() {
               return {
                     zipkey: '',
-                    lastSync: 0, // Date.now(),
-                    refreshInterval: 1000,
+                    lastSync: 0,
+                    refreshInterval: 5,
                     localFiles: [],
                     dirH: null,
                     datazip,
