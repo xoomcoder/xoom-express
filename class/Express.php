@@ -325,7 +325,7 @@ class Express
         if ("/@/file/" == substr($path, 0, 8)) {
             $datadir = WP_PLUGIN_DIR . "/xp-data";
             $zpath = str_replace("/@/file/", "", $path);
-            lit($md5, $path) = explode("/", $zpath, 2);
+            list($md5, $path) = explode("/", $zpath, 2);
 
             extract(pathinfo($path));
             $dirname = strtolower(preg_replace(",[^a-zA-Z0-9/],", "-", $dirname));
