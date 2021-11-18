@@ -30,6 +30,7 @@ class ApiPublic
     {
         extract($form);
         $key ??= "";
+        $filename ??= "upload";
         $datadir = V::get("datadir");
         if ("" != $key) {
             $zipsearch = "$datadir/data*-$key.zip";
@@ -39,7 +40,7 @@ class ApiPublic
                 $zip = new ZipArchive;
                 $ok = $zip->open($zipfile);
                 if ($ok === true) {
-                    Form::uploadZip($zip, "upload");
+                    Form::uploadZip($zip, $filename);
                     $zip->close();
                 }
 

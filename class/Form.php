@@ -13,6 +13,9 @@ class Form
                     $filename ??= "upload";
                     $extension ??= "";
     
+                    // debug
+                    echo "($name)";
+                    
                     $filename = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $filename));
                     $extension = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $extension));
                     if ($extension != "") {

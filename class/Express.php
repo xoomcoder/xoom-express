@@ -115,7 +115,8 @@ class Express
                 </nav>
                 <button @click="openLocalFolder">Open Local Folder</button>
                 <button @click="refreshLocalFiles">refresh list</button>
-                <input type="range" min="0" max="10000" step="1000" v-model="refreshInterval">
+                <input type="range" min="0" max="10000" step="1000" v-model="refreshInterval">{{ refreshInterval }}s
+                <input type="text" v-model="zipkey">({{ zipkey }})({{ lastSync }})
                 <ul class="tree">
                     <li v-for="f in localFiles" :class="f.kind">{{ f.path + '/' + f.name }} ({{ f.modifDate }})</li>
                 </ul>
@@ -168,7 +169,7 @@ class Express
                         else {
                             entry.lastModif = '';
                         }
-                        console.log(entry);
+                        // console.log(entry);
                         entries.push(entry);
                         if (entry.kind === 'directory') {
                             let subentries = await this.listSubFolder(entry, path + '/' + folderH.name);
@@ -182,6 +183,46 @@ class Express
                     if (this.dirH == null) return;
                     let entries = await this.listSubFolder(this.dirH, this.dirH.name);
                     this.localFiles = entries;
+
+                    // sync files with server
+                    console.log(this.zipkey);
+                    if (this.zipkey != '') {
+                        this.localFiles.forEach(async (f) => {
+                            if (f.kind == 'directory') return;
+    
+                            let lastm = f.lastModif;
+                            if (this.lastSync < lastm) {
+                                console.log(f);
+                                let fd = new FormData();
+    
+                                let mydata = {
+                                    'action' : 'upload',
+                                    'key': this.zipkey,
+                                    'filename': 'upload',
+                                };
+    
+                                let b64json = btoa(JSON.stringify(mydata));
+                                fd.append('b64json', b64json);
+                    
+                                // add upload file
+                                let blob = await f.getFile();
+                                fd.append('upload', blob, f.path + '/' + f.name);
+                    
+                                let response =  await fetch('https://xpress.applh.com/@/api', {
+                                    method: 'POST',
+                                    body: fd
+                                });
+                                let responseJson = await response.json();
+                                console.log(responseJson);
+                    
+                            }
+    
+                        });
+    
+                        // update lastSync
+                        this.lastSync = Date.now();
+                    }
+
                     if (this.refreshInterval > 0)
                         setTimeout(this.refreshLocalFiles, this.refreshInterval);
                 },
@@ -227,6 +268,8 @@ class Express
             },
             data() {
               return {
+                    zipkey: '',
+                    lastSync: Date.now(),
                     refreshInterval: 1000,
                     localFiles: [],
                     dirH: null,
