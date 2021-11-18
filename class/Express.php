@@ -240,7 +240,7 @@ class Express
 
             $searchfile = "zip://$datadir/data-$md5.zip#$filename.$extension";
             $result = @file_get_contents($searchfile);
-            if ($result !== null) {
+            if (!is_null($result)) {
                 $mimes = [
                     "json"  => "application/json",
                     "jpg"   => "image/jpeg",
@@ -254,8 +254,10 @@ class Express
                     "js"    => "application/javascript",
                     "pdf"   => "application/pdf",
                     "zip"   => "application/zip",
+                    "mp3"   => "audio/mp3",
+                    "mp4"   => "video/mp4",
                 ];
-                $mime = $mimes[$extension] ?? "";
+                $mime = $mimes[$extension] ?? "application/octet-stream";
                 if ($mime != "") {
                     header("Content-Type: $mime");
                 }
