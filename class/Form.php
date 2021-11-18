@@ -23,8 +23,12 @@ class Form
                     $dirname = strtolower(preg_replace(",[^a-zA-Z0-9/],", "-", $dirname));
                     $filename = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $filename));
                     $extension = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $extension));
+
+                    $dirname = trim($dirname, "/");
+                    if ($dirname != "") $dirname .= "/";
+        
                     if ($extension != "") {
-                        $zip->addFile($tmp_name, "$dirname/$filename.$extension");
+                        $zip->addFile($tmp_name, "$dirname$filename.$extension");
                         $json["result"] = "$dirname/$filename.$extension";
                         V::set("upload/$input_name", "$dirname/$filename.$extension");    
     

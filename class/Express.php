@@ -323,17 +323,33 @@ class Express
         }
         // direct access to zip files
         if ("/@/file/" == substr($path, 0, 8)) {
+            // FIXME
+            status_header(200);
+
             $datadir = WP_PLUGIN_DIR . "/xp-data";
             $zpath = str_replace("/@/file/", "", $path);
+            //echo "($zpath)";
             list($md5, $path) = explode("/", $zpath, 2);
 
+            $path ??= "index.html";
+            if ($path == "") $path = "index.html";
+            //echo "($path)";
             extract(pathinfo($path));
-            $dirname = strtolower(preg_replace(",[^a-zA-Z0-9/],", "-", $dirname));
+            $dirname ??= "";
+            if ($dirname == ".") $dirname = "";
+            $extension ??= "";
+
+            // echo "($dirname)";
+
+            $dirname = strtolower(preg_replace(",[^a-zA-Z0-9\/],", "-", $dirname));
             $filename = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $filename));
             $extension = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $extension));
 
-            $searchfile = "zip://$datadir/data-$md5.zip#$dirname/$filename.$extension";
-            $result = @file_get_contents($searchfile);
+            $dirname = trim($dirname, "/");
+            if ($dirname != "") $dirname .= "/";
+            $searchfile = "zip://$datadir/data-$md5.zip#$dirname$filename.$extension";
+            // echo "($searchfile)";
+            $result = file_get_contents($searchfile);
             if (!is_null($result)) {
                 $mimes = [
                     "json"  => "application/json",
@@ -355,7 +371,6 @@ class Express
                 if ($mime != "") {
                     header("Content-Type: $mime");
                 }
-                status_header(200);
                 echo $result;
             }
         }
