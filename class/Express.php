@@ -325,12 +325,14 @@ class Express
         if ("/@/file/" == substr($path, 0, 8)) {
             $datadir = WP_PLUGIN_DIR . "/xp-data";
             $zpath = str_replace("/@/file/", "", $path);
-            extract(pathinfo($zpath));
-            $md5 = basename($dirname);
+            lit($md5, $path) = explode("/", $zpath, 2);
+
+            extract(pathinfo($path));
+            $dirname = strtolower(preg_replace(",[^a-zA-Z0-9/],", "-", $dirname));
             $filename = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $filename));
             $extension = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $extension));
 
-            $searchfile = "zip://$datadir/data-$md5.zip#$filename.$extension";
+            $searchfile = "zip://$datadir/data-$md5.zip#$dirname/$filename.$extension";
             $result = @file_get_contents($searchfile);
             if (!is_null($result)) {
                 $mimes = [
