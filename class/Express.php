@@ -199,6 +199,7 @@ class Express
                                     'action' : 'upload',
                                     'key': this.zipkey,
                                     'filename': 'upload',
+                                    'zipath': f.path + '/' + f.name,
                                 };
     
                                 let b64json = btoa(JSON.stringify(mydata));
