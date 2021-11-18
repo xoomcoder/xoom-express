@@ -242,7 +242,18 @@ class Express
             $result = @file_get_contents($searchfile);
             if ($result !== null) {
                 $mimes = [
+                    "json"  => "application/json",
+                    "jpg"   => "image/jpeg",
+                    "jpeg"  => "image/jpeg",
                     "png"   => "image/png",
+                    "gif"   => "image/gif",
+                    "svg"   => "image/svg+xml",
+                    "txt"   => "text/plain",
+                    "html"  => "text/html",
+                    "css"   => "text/css",
+                    "js"    => "application/javascript",
+                    "pdf"   => "application/pdf",
+                    "zip"   => "application/zip",
                 ];
                 $mime = $mimes[$extension] ?? "";
                 if ($mime != "") {
