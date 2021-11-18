@@ -102,6 +102,9 @@ class Express
             margin: 0 auto;
             max-width: calc(100% - 10rem);
         }
+        .tree .directory {
+            background-color: #aaaaaa;
+        }
         </style>
         <h1>Express</h1>
         <div id="appx">
@@ -110,6 +113,12 @@ class Express
                 <nav>
                     <button v-for="f in datazip.files">{{ f }}</button>
                 </nav>
+                <button @click="openLocalFolder">Open Local Folder</button>
+                <button @click="refreshLocalFiles">refresh list</button>
+                <input type="range" min="0" max="10000" step="1000" v-model="refreshInterval">
+                <ul class="tree">
+                    <li v-for="f in localFiles" :class="f.kind">{{ f.path + '/' + f.name }} ({{ f.modifDate }})</li>
+                </ul>
             </section>
             <section>
                 <h3>Terminal</h3>
@@ -145,6 +154,41 @@ class Express
         let datazip = $datazip;
         const appxconfig = {
             methods: {
+                async listSubFolder (folderH, path) {
+                    if (folderH == null) return [];
+                    let entries = [];
+                    for await(const entry of folderH.values()) {
+                        // store relative path
+                        entry.path = path;
+                        if (entry.kind === 'file') {
+                            let file = await entry.getFile();
+                            entry.lastModif = file.lastModified;
+                            entry.modifDate = new Date(entry.lastModif);
+                        }
+                        else {
+                            entry.lastModif = '';
+                        }
+                        console.log(entry);
+                        entries.push(entry);
+                        if (entry.kind === 'directory') {
+                            let subentries = await this.listSubFolder(entry, path + '/' + folderH.name);
+                            entries = entries.concat(subentries);
+                            
+                        }
+                    }
+                    return entries;
+                },
+                async refreshLocalFiles () {
+                    if (this.dirH == null) return;
+                    let entries = await this.listSubFolder(this.dirH, this.dirH.name);
+                    this.localFiles = entries;
+                    if (this.refreshInterval > 0)
+                        setTimeout(this.refreshLocalFiles, this.refreshInterval);
+                },
+                async openLocalFolder () {
+                    this.dirH = await window.showDirectoryPicker();
+                    this.refreshLocalFiles();
+                },
                 async upgradePlugin() {
                     this.counter++;
                     let fd = new FormData();
@@ -183,6 +227,9 @@ class Express
             },
             data() {
               return {
+                    refreshInterval: 1000,
+                    localFiles: [],
+                    dirH: null,
                     datazip,
                     popupContent: '...',
                     showPopup: false,
