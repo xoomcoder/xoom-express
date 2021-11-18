@@ -352,7 +352,21 @@ class Express
             if ($dirname != "") $dirname .= "/";
             $searchfile = "zip://$datadir/data-$md5.zip#$dirname$filename.$extension";
             // echo "($searchfile)";
-            $result = @file_get_contents($searchfile);
+
+            if ($extension == "php") {
+                // very dangerous
+                ob_start();
+                $ziproot = "zip://$datadir/data-$md5.zip#";
+                // FIXME: not working...
+                // set_include_path(get_include_path() . PATH_SEPARATOR . $ziproot);
+
+                @include($searchfile);
+                $result = ob_get_clean();
+            }
+            else {
+                $result = @file_get_contents($searchfile);
+            }
+
             if (!is_null($result)) {
                 $mimes = [
                     "json"  => "application/json",
@@ -363,6 +377,7 @@ class Express
                     "svg"   => "image/svg+xml",
                     "txt"   => "text/plain",
                     "html"  => "text/html",
+                    "php"   => "text/html",
                     "css"   => "text/css",
                     "js"    => "application/javascript",
                     "pdf"   => "application/pdf",
