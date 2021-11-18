@@ -349,7 +349,7 @@ class Express
             if ($dirname != "") $dirname .= "/";
             $searchfile = "zip://$datadir/data-$md5.zip#$dirname$filename.$extension";
             // echo "($searchfile)";
-            $result = file_get_contents($searchfile);
+            $result = @file_get_contents($searchfile);
             if (!is_null($result)) {
                 $mimes = [
                     "json"  => "application/json",
