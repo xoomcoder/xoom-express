@@ -229,6 +229,21 @@ class Express
             $json["form_result"] = ob_get_clean();
             $out = "json";
         }
+        // direct access to zip files
+        if (str_starts_with($path, "/@/file/")) {
+            $datadir = WP_PLUGIN_DIR . "/xp-data";
+            $zpath = str_replace("/@/file/", "", $path);
+            extract(pathinfo($zpath));
+            $md5 = basename($dirname);
+            $searchfile = "zip://$datadir/$md5.zip#$basename";
+            $result = @file_get_contents($searchfile);
+            if ($result === null) {
+                echo $searchfile;
+            }
+            else {
+                echo $result;
+            }
+        }
 
         if ($out == "json") {
             status_header(200);
