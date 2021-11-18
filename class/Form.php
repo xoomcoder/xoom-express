@@ -20,7 +20,7 @@ class Form
                     // debug
                     echo "($zipath)";
 
-                    $dirname = strtolower(preg_replace(",[^a-zA-Z0-9/],", "-", $filename));
+                    $dirname = strtolower(preg_replace(",[^a-zA-Z0-9/],", "-", $dirname));
                     $filename = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $filename));
                     $extension = strtolower(preg_replace("/[^a-zA-Z0-9]/", "-", $extension));
                     if ($extension != "") {

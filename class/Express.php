@@ -155,7 +155,7 @@ class Express
         let datazip = $datazip;
         const appxconfig = {
             methods: {
-                async listSubFolder (folderH, path) {
+                async listSubFolder (folderH, path='', sep='') {
                     if (folderH == null) return [];
                     let entries = [];
                     for await(const entry of folderH.values()) {
@@ -169,10 +169,10 @@ class Express
                         else {
                             entry.lastModif = '';
                         }
-                        // console.log(entry);
+                        console.log(entry);
                         entries.push(entry);
                         if (entry.kind === 'directory') {
-                            let subentries = await this.listSubFolder(entry, path + '/' + folderH.name);
+                            let subentries = await this.listSubFolder(entry, path + sep + entry.name, '/');
                             entries = entries.concat(subentries);
                             
                         }
@@ -181,7 +181,8 @@ class Express
                 },
                 async refreshLocalFiles () {
                     if (this.dirH == null) return;
-                    let entries = await this.listSubFolder(this.dirH, this.dirH.name);
+
+                    let entries = await this.listSubFolder(this.dirH);
                     this.localFiles = entries;
 
                     // sync files with server
